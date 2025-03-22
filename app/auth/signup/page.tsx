@@ -1,23 +1,12 @@
 import { signup } from './actions'
 import Link from 'next/link'
-import { getCsrfFormField } from '@/utils/csrf'
 
-export default async function SignupPage() {
-  // Get CSRF token
-  const csrfField = await getCsrfFormField();
-  
+export default function SignupPage() {
   return (
     <div className="auth-container">
       <div className="auth-card">
         <h1 className="auth-card-header">Sign Up</h1>
         <form className="auth-form">
-          {/* Hidden CSRF token field */}
-          <input 
-            type="hidden" 
-            name={csrfField.name} 
-            value={csrfField.value}
-          />
-          
           <div className="auth-form-group">
             <label htmlFor="firstName" className="auth-label">First Name:</label>
             <input 
