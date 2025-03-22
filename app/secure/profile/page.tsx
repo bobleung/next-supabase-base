@@ -1,24 +1,24 @@
-import { logout } from './actions'
+import { createClient } from '@/utils/supabase/server'
+import ProfileClient from './profile-client'
 
-export default function Profile() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Profile</h1>
-        
-        <div className="mb-6">
-          <p className="text-gray-600 mb-2">User information will be displayed here.</p>
-        </div>
-        
-        <form action={logout}>
-          <button 
-            type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
-          >
-            Log Out
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+export default async function ProfilePage() {
+  const supabase = await createClient()
+  
+  // Get the current user
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  let profile = null
+  
+  // Get the user's profile if user exists
+  if (user) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+    
+    profile = data
+  }
+  
+  return <ProfileClient user={user} profile={profile} />
 }

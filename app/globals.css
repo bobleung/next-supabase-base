@@ -1,8 +1,85 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   h1 {
     @apply text-4xl font-bold;
+  }
+}
+
+@layer components {
+  /* Container styles */
+  .auth-container {
+    @apply flex flex-col items-center justify-center min-h-screen py-2;
+  }
+  
+  .auth-card {
+    @apply p-8 bg-white rounded-lg shadow-md w-full max-w-md;
+  }
+  
+  .auth-card-header {
+    @apply text-2xl font-bold mb-6 text-center;
+  }
+  
+  /* Form styles */
+  .auth-form {
+    @apply space-y-4;
+  }
+  
+  .auth-form-group {
+    @apply flex flex-col space-y-1;
+  }
+  
+  .auth-label {
+    @apply text-sm font-medium;
+  }
+  
+  .auth-input {
+    @apply p-2 border border-gray-300 rounded-md;
+  }
+  
+  .auth-help-text {
+    @apply text-xs text-gray-500 mt-1;
+  }
+  
+  /* Button styles */
+  .auth-button-primary {
+    @apply w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300;
+  }
+  
+  .auth-button-secondary {
+    @apply w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md transition-colors duration-300;
+  }
+  
+  .auth-button-danger {
+    @apply w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded transition-colors duration-300;
+  }
+  
+  .auth-button-disabled {
+    @apply bg-blue-300 cursor-not-allowed;
+  }
+  
+  /* Message styles */
+  .auth-message-success {
+    @apply p-4 mb-4 rounded-md bg-green-100 text-green-800;
+  }
+  
+  .auth-message-error {
+    @apply p-4 mb-4 rounded-md bg-red-100 text-red-800;
+  }
+  
+  /* Link styles */
+  .auth-link {
+    @apply text-blue-500 hover:text-blue-600;
+  }
+  
+  /* Section styles */
+  .auth-section {
+    @apply bg-gray-50 p-4 rounded-md;
+  }
+  
+  .auth-section-header {
+    @apply text-lg font-medium mb-4;
   }
 }
