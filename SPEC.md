@@ -47,4 +47,4 @@ This project extensively utilizes Tailwind CSS for all styling needs:
 3. Build and deploy when ready
 
 ## Deployment
-The project is optimized for deployment on Vercel, but can be deployed to any platform that supports Next.js.
+...
