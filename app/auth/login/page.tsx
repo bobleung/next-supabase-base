@@ -1,12 +1,23 @@
 import { login } from './actions'
 import Link from 'next/link'
+import { getCsrfFormField } from '@/utils/csrf'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  // Get CSRF token
+  const csrfField = await getCsrfFormField();
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="p-8 bg-white rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Log In</h1>
         <form className="space-y-4">
+          {/* Hidden CSRF token field */}
+          <input 
+            type="hidden" 
+            name={csrfField.name} 
+            value={csrfField.value}
+          />
+          
           <div className="flex flex-col space-y-1">
             <label htmlFor="email" className="text-sm font-medium">Email:</label>
             <input 

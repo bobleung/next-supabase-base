@@ -4,8 +4,18 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
+import { verifyCsrfToken } from '@/utils/csrf'
 
 export async function login(formData: FormData) {
+  // Get and verify CSRF token
+  const csrfToken = formData.get('csrfToken') as string;
+  const isValidCsrf = await verifyCsrfToken(csrfToken);
+  
+  if (!isValidCsrf) {
+    console.error('CSRF validation failed');
+    redirect('/auth/error?message=invalid_request');
+  }
+
   const supabase = await createClient()
 
   // type-casting here for convenience
@@ -18,7 +28,8 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect('/error')
+    console.error('Login error:', error.message);
+    redirect('/auth/error');
   }
 
   revalidatePath('/', 'layout')

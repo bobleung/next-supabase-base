@@ -4,8 +4,18 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
+import { verifyCsrfToken } from '@/utils/csrf'
 
 export async function signup(formData: FormData) {
+  // Get and verify CSRF token
+  const csrfToken = formData.get('csrfToken') as string;
+  const isValidCsrf = await verifyCsrfToken(csrfToken);
+  
+  if (!isValidCsrf) {
+    console.error('CSRF validation failed');
+    redirect('/auth/error?message=invalid_request');
+  }
+
   const supabase = await createClient()
 
   // type-casting here for convenience
@@ -22,7 +32,8 @@ export async function signup(formData: FormData) {
   const { data: authData, error: signUpError } = await supabase.auth.signUp(data)
 
   if (signUpError) {
-    redirect('/error')
+    console.error('Signup error:', signUpError.message);
+    redirect('/auth/error');
   }
 
   // If signup was successful, create a profile for the user
@@ -38,8 +49,8 @@ export async function signup(formData: FormData) {
       })
 
     if (profileError) {
-      console.error('Error creating profile:', profileError)
-      redirect('/error')
+      console.error('Error creating profile:', profileError);
+      redirect('/auth/error');
     }
   }
 
