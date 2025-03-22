@@ -1,22 +1,51 @@
 import React from 'react';
 import Link from 'next/link';
 import styles from './navbar.module.css';
+import { createClient } from '@/utils/supabase/server';
 
-interface User {
-  first_name: string;
-  last_name: string;
-}
+// Define the Profile type
+type Profile = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  avatar_url: string | null;
+  website: string | null;
+  bio: string | null;
+  created_at: string;
+  updated_at: string;
+};
 
 // Variables for the navbar
 const appName: string = 'my app';
-const user: User = {
-  first_name: 'John',
-  last_name: 'Doe'
-};
 
-const Navbar: React.FC = () => {
-  // Extract user's initial from first_name and last_name
-  const userInitial = `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`.toUpperCase();
+const Navbar = async () => {
+  // Get Supabase client
+  const supabase = await createClient();
+  
+  // Get the current user
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let profile: Profile | null = null;
+  let userInitial = '';
+  
+  // Get the user's profile if user exists
+  if (user) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    
+    profile = data;
+    
+    // Generate user initials from first_name and last_name
+    if (profile && profile.first_name && profile.last_name) {
+      userInitial = `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}`.toUpperCase();
+    } else {
+      // Fallback if profile data is incomplete
+      userInitial = user.email?.charAt(0).toUpperCase() || '?';
+    }
+  }
 
   return (
     <nav className={styles.navbar}>
