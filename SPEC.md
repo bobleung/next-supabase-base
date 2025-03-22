@@ -53,6 +53,25 @@ This project leverages Supabase for authentication and database services:
   - Extended user data stored in `profiles` table with first_name, last_name, and other profile information
   - Profile created on user signup via server action
 
+### Security Architecture
+
+- **CSRF Protection**:
+  - CSRF (Cross-Site Request Forgery) protection is built into Next.js Server Actions
+  - Server Actions require both a POST request method and a Next.js-specific header, preventing CSRF attacks
+  - Supabase authentication uses cookies with proper security attributes (HttpOnly, SameSite)
+  - Forms use Server Actions via the `formAction` attribute (e.g., `formAction={login}`)
+  - This implementation provides robust protection without requiring custom CSRF tokens
+
+- **Route Protection**:
+  - Middleware intercepts requests to protected routes
+  - Checks for valid authentication session
+  - Redirects unauthenticated users to login page
+
+- **Authentication Security**:
+  - Credentials processed server-side via Server Actions
+  - Passwords never exposed to client-side JavaScript
+  - Authentication state managed through Supabase session cookies
+
 ### Database Architecture
 
 - **Tables**:
