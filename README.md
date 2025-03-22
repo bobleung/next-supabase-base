@@ -39,6 +39,17 @@ NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
+## Security Features
+
+This project implements several security best practices:
+
+- **Input Validation**: Both client-side and server-side validation using Zod
+- **CSRF Protection**: Built-in protection via Next.js Server Actions and Supabase
+- **Error Handling**: User-friendly error messages without exposing sensitive information
+- **Authentication Flow**: Secure authentication flow with proper session management
+
+For more information on security implementation details, refer to the SPEC.md file.
+
 ## Using Supabase CLI
 
 The Supabase CLI is installed locally in this project and should be used with `npx`. Here are some common commands:

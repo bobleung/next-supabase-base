@@ -9,6 +9,7 @@ This is a Next.js project that provides a base template for building modern web 
 - **Language**: TypeScript v5
 - **Font**: Geist (via next/font)
 - **Authentication & Database**: [Supabase](https://supabase.com/) using @supabase/ssr v0.6.1
+- **Validation**: [Zod](https://github.com/colinhacks/zod) v3.24.2
 - **React**: v19.0.0
 - **React DOM**: v19.0.0
 - **Development Enhancement**: TurboPack
@@ -29,6 +30,7 @@ This is a Next.js project that provides a base template for building modern web 
 - `public/` - Static assets
 - `utils/` - Utility functions and helpers
   - `supabase/` - Supabase client implementations (client/server/middleware)
+  - `validation/` - Validation schemas and utilities
 - `middleware.ts` - Global middleware configuration
 - `supabase/` - Supabase schema dumps and database configuration
 
@@ -55,6 +57,14 @@ This project leverages Supabase for authentication and database services:
 
 ### Security Architecture
 
+- **Input Validation**:
+  - Comprehensive validation using Zod for type-safe schema validation
+  - Client-side validation provides immediate feedback to users
+  - Server-side validation ensures data integrity even if client validation is bypassed
+  - Validation schemas defined in `utils/validation/auth.ts`
+  - Form data validated before processing to prevent injection attacks
+  - Error messages are user-friendly and context-specific
+
 - **CSRF Protection**:
   - CSRF (Cross-Site Request Forgery) protection is built into Next.js Server Actions
   - Server Actions require both a POST request method and a Next.js-specific header, preventing CSRF attacks
@@ -71,6 +81,29 @@ This project leverages Supabase for authentication and database services:
   - Credentials processed server-side via Server Actions
   - Passwords never exposed to client-side JavaScript
   - Authentication state managed through Supabase session cookies
+  - Form validation prevents submission of invalid data
+
+### Validation Architecture
+
+- **Validation Schemas**:
+  - Located in `utils/validation/auth.ts`
+  - Common schemas for reusable validation rules (email, password)
+  - Compound schemas for form validation (login, signup)
+  - TypeScript type inference for type safety
+
+- **Validation Implementation**:
+  - **Server-Side**: Form data validated in server actions before processing
+  - **Client-Side**: Real-time validation during user input
+  - **Error Handling**: Structured error responses for field-specific feedback
+
+- **Form Validation Flow**:
+  1. User inputs data into form fields
+  2. Client-side validation provides immediate feedback on blur and change events
+  3. Form submission is prevented if client-side validation fails
+  4. If client validation passes, data is sent to server action
+  5. Server action performs validation again as a security measure
+  6. Validation errors are returned to client if server validation fails
+  7. If all validation passes, the authentication action proceeds
 
 ### Database Architecture
 
@@ -120,7 +153,14 @@ This project leverages Supabase for authentication and database services:
 
 - **Authentication Actions**:
   - `login` action in `/app/auth/login/actions.ts`
+    - Validates login form data
+    - Authenticates user via Supabase
+    - Returns structured response with success status and any errors
   - `signup` action in `/app/auth/signup/actions.ts`
+    - Validates signup form data
+    - Creates user account via Supabase
+    - Creates user profile record
+    - Returns structured response with success status and any errors
 
 ## Development Workflow
 1. Make changes to the codebase
@@ -162,6 +202,11 @@ Key Tailwind features used in this project:
 Configuration can be found in `tailwind.config.js` and Tailwind is applied via the `globals.css` file.
 
 ## Future Enhancements
+- Enhanced password policy with stronger requirements
+- Rate limiting for authentication attempts
+- Improved session management with timeouts
+- Additional security headers
+- Comprehensive logout functionality
 - Testing framework integration
 - More comprehensive error handling
 - Expanded component library
