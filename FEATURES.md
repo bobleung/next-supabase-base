@@ -25,6 +25,25 @@ Allow users to permanently delete their account and all associated data.
 **Environment Variables Required:**
 - `SUPABASE_SERVICE_ROLE_KEY` - The service role key from Supabase (never expose to the client)
 
+**Implementation Example:**
+```typescript
+// utils/supabase/admin.ts
+import { createClient } from '@supabase/supabase-js'
+
+export const createAdminClient = () => {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    }
+  )
+}
+```
+
 **Testing Criteria:**
 - Verify the admin client can authenticate with Supabase
 - Confirm it can perform privileged operations

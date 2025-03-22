@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { logout } from './actions'
 import { createClient } from '@/utils/supabase/client'
 import { User } from '@supabase/supabase-js'
+import DeleteAccountModal from './delete-account-modal'
 
 // Define the Profile type
 type Profile = {
@@ -29,6 +30,7 @@ export default function ProfileClient({
   const supabase = createClient()
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   // Form state
   const [firstName, setFirstName] = useState(profile?.first_name || '')
@@ -246,14 +248,38 @@ export default function ProfileClient({
               </form>
             </div>
             
-            <form action={logout}>
-              <button 
-                type="submit"
-                className="auth-button-danger"
-              >
-                Log Out
-              </button>
-            </form>
+            <div className="auth-section">
+              <h2 className="auth-section-header">Account Actions</h2>
+              <div className="space-y-4">
+                <form action={logout}>
+                  <button 
+                    type="submit"
+                    className="auth-button-danger"
+                  >
+                    Log Out
+                  </button>
+                </form>
+                
+                <div className="pt-4 border-t border-gray-200">
+                  <h3 className="text-lg font-medium text-red-600 mb-2">Danger Zone</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Once you delete your account, there is no going back. Please be certain.
+                  </p>
+                  <button 
+                    type="button"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium"
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <DeleteAccountModal 
+              isOpen={isDeleteModalOpen}
+              onClose={() => setIsDeleteModalOpen(false)}
+            />
           </div>
         )}
         

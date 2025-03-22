@@ -37,7 +37,10 @@ To set up Supabase:
 ```
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key  # Required for admin operations like deleting users
 ```
+
+⚠️ **Important**: The service role key provides admin access to your database. This key should be kept secret and only used on the server side.
 
 ## Security Features
 
