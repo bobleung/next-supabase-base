@@ -54,18 +54,26 @@ const Navbar = async () => {
         {appName}
       </Link>
 
-      {/* Navigation items on the right */}
+      {/* Navigation items on the right - only shown when user is logged in */}
       <div className={styles.navLinks}>
-        <Link href="/secure/dashboard" className={styles.navLink}>
-          Dashboard
-        </Link>
-        <Link href="/secure/tasks" className={styles.navLink}>
-          Tasks
-        </Link>
-        {/* User avatar with initial */}
-        <Link href="/secure/profile" className={styles.avatar}>
-          {userInitial}
-        </Link>
+        {user ? (
+          <>
+            <Link href="/secure/dashboard" className={styles.navLink}>
+              Dashboard
+            </Link>
+            <Link href="/secure/tasks" className={styles.navLink}>
+              Tasks
+            </Link>
+            {/* User avatar with initial */}
+            <Link href="/secure/profile" className={styles.avatar}>
+              {userInitial}
+            </Link>
+          </>
+        ) : (
+          <Link href="/auth/login" className={styles.navLink}>
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   );
