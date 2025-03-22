@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import styles from './navbar.module.css';
 
 interface User {
   first_name: string;
@@ -18,38 +19,23 @@ const Navbar: React.FC = () => {
   const userInitial = `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`.toUpperCase();
 
   return (
-    <nav style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '1rem',
-      backgroundColor: '#f8f8f8',
-      borderBottom: '1px solid #ccc'
-    }}>
+    <nav className={styles.navbar}>
       {/* App Name on the left */}
-      <Link href="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none', color: 'inherit' }}>
+      <Link href="/" className={styles.appName}>
         {appName}
       </Link>
 
       {/* Navigation items on the right */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Link href="/secure/dashboard" style={{ margin: '0 1rem', textDecoration: 'none', color: 'inherit' }}>Dashboard</Link>
-        <Link href="/secure/tasks" style={{ margin: '0 1rem', textDecoration: 'none', color: 'inherit' }}>Tasks</Link>
+      <div className={styles.navLinks}>
+        <Link href="/secure/dashboard" className={styles.navLink}>
+          Dashboard
+        </Link>
+        <Link href="/secure/tasks" className={styles.navLink}>
+          Tasks
+        </Link>
         {/* User avatar with initial */}
-        <Link href="/secure/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            backgroundColor: '#007bff',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold'
-          }}>
-            {userInitial}
-          </div>
+        <Link href="/secure/profile" className={styles.avatar}>
+          {userInitial}
         </Link>
       </div>
     </nav>
