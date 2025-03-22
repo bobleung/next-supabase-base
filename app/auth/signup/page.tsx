@@ -8,6 +8,26 @@ export default function SignupPage() {
         <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
         <form className="space-y-4">
           <div className="flex flex-col space-y-1">
+            <label htmlFor="firstName" className="text-sm font-medium">First Name:</label>
+            <input 
+              id="firstName" 
+              name="firstName" 
+              type="text" 
+              required 
+              className="p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div className="flex flex-col space-y-1">
+            <label htmlFor="lastName" className="text-sm font-medium">Last Name:</label>
+            <input 
+              id="lastName" 
+              name="lastName" 
+              type="text" 
+              required 
+              className="p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div className="flex flex-col space-y-1">
             <label htmlFor="email" className="text-sm font-medium">Email:</label>
             <input 
               id="email" 
