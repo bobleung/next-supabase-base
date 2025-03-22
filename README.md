@@ -39,6 +39,18 @@ NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
+## Using Supabase CLI
+
+The Supabase CLI is installed locally in this project and should be used with `npx`. Here are some common commands:
+
+* Always run Supabase commands using `npx` (e.g., `npx supabase start`)
+* To get the database schema, run:
+  ```bash
+  npx supabase db dump --local --file schema_dump.sql
+  ```
+* The schema dump file should be placed in the `/supabase` folder
+* The location of the schema dump file will be at `/supabase/schema_dump.sql`
+
 ## Styling with Tailwind CSS
 
 This project is configured with [Tailwind CSS](https://tailwindcss.com) for styling. Tailwind is a utility-first CSS framework that allows for rapid UI development with predefined classes.
