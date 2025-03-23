@@ -48,6 +48,7 @@ This project implements several security best practices:
 
 - **Input Validation**: Both client-side and server-side validation using Zod
 - **CSRF Protection**: Built-in protection via Next.js Server Actions and Supabase
+- **Security Headers**: Comprehensive security headers including Content-Security-Policy (see [Security Headers Documentation](/docs/security/headers.md))
 - **Error Handling**: User-friendly error messages without exposing sensitive information
 - **Authentication Flow**: Secure authentication flow with proper session management
 

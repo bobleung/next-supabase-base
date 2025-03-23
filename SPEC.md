@@ -57,6 +57,12 @@ This project leverages Supabase for authentication and database services:
 
 ### Security Architecture
 
+- **Security Headers**:
+  - Comprehensive HTTP security headers implementation
+  - Content-Security-Policy with balanced configuration for security and functionality
+  - Protection against XSS, clickjacking, MIME-type sniffing, and other common attacks
+  - Detailed documentation available in [Security Headers Documentation](/docs/security/headers.md)
+
 - **Input Validation**:
   - Comprehensive validation using Zod for type-safe schema validation
   - Client-side validation provides immediate feedback to users
