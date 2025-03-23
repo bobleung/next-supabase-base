@@ -18,95 +18,16 @@ The application has a basic authentication and route protection mechanism using 
 - ✅ Implemented frontend validation for immediate user feedback
 - ✅ Added server-side validation in the auth action files using Zod
 
-### 2. Missing Security Headers ⚠️
+### 2. Missing Security Headers ✅
 
 **Issue:** No explicit security headers configuration.
 
 **Risk:** Various attacks including clickjacking, XSS, MIME-type sniffing, etc.
 
-**Implementation Steps:**
-
-1. **Create or Update Next.js Config File** ✅
-   - Located existing `next.config.ts` file in the project root
-   - Verified it has the proper export structure
-
-2. **Define Basic Security Headers** ✅
-   - Defined the initial set of non-CSP security headers:
-     - X-DNS-Prefetch-Control
-     - X-XSS-Protection
-     - X-Frame-Options
-     - X-Content-Type-Options
-     - Referrer-Policy
-   - Headers are defined but not yet applied (will be implemented in step 4)
-
-3. **Implement Content Security Policy (CSP)** ✅
-   - Added CSP header with the following directives:
-     - default-src 'self': Restricts all resources to same origin by default
-     - script-src 'self' 'unsafe-inline': Allows scripts from same origin and inline scripts
-     - style-src 'self' 'unsafe-inline': Allows styles from same origin and inline styles
-     - font-src 'self': Restricts fonts to same origin
-     - img-src 'self' data:: Allows images from same origin and data URIs
-     - connect-src 'self' https://*.supabase.co: Allows connections to same origin and Supabase
-   - CSP is defined but not yet applied (will be implemented in step 4)
-
-4. **Add Headers Configuration to Next.js Config** ✅
-   - Implemented the `headers()` function in Next.js config
-   - Configured it to apply security headers to all routes using the '/(.*)'
-     source pattern
-   - All previously defined headers will now be applied to responses
-
-5. **Test Security Headers Implementation** ✅
-   - ✅ Ran application locally
-   - ✅ Used curl to verify headers are being applied
-   - ✅ Confirmed all six security headers are present and correctly configured
-
-6. **Document the Implementation** ✅
-   - ✅ Created detailed documentation in docs/security/headers.md
-   - ✅ Documented configuration decisions and trade-offs
-   - ✅ Updated WIP.md to mark this task as completed
-
-**Example Implementation:**
-
-```typescript
-// In next.config.ts
-const securityHeaders = [
-  {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on',
-  },
-  {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block',
-  },
-  {
-    key: 'X-Frame-Options',
-    value: 'SAMEORIGIN',
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
-  },
-  {
-    key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin',
-  },
-  {
-    key: 'Content-Security-Policy',
-    value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-  }
-];
-
-module.exports = {
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders,
-      },
-    ];
-  },
-};
-```
+**Solution:**
+- ✅ Implemented comprehensive security headers in next.config.ts
+- ✅ Added Content Security Policy (CSP) with appropriate directives
+- ✅ Created detailed documentation in docs/security/headers.md
 
 ### 3. Logout Implementation ✅
 
@@ -183,39 +104,7 @@ const signupSchema = z.object({
 **Solution:**
 - Implement API rate limiting for authentication endpoints
 - Consider using a middleware solution like `express-rate-limit` if using API routes
-- For server actions, implement a custom rate limiting solution:
-
-```typescript
-// utils/rate-limit.ts
-import { Redis } from '@upstash/redis'
-
-const redis = new Redis({
-  url: process.env.REDIS_URL!,
-  token: process.env.REDIS_TOKEN!,
-})
-
-export async function rateLimit(ip: string, action: string, limit = 5, window = 60) {
-  const key = `rate-limit:${action}:${ip}`
-  const current = await redis.get(key) as number || 0
-  
-  if (current >= limit) {
-    return false
-  }
-  
-  await redis.incr(key)
-  await redis.expire(key, window)
-  
-  return true
-}
-
-// In login action
-const ip = request.headers.get('x-forwarded-for') || 'unknown'
-const canProceed = await rateLimit(ip, 'login', 5, 60)
-
-if (!canProceed) {
-  return { error: 'Too many attempts. Please try again later.' }
-}
-```
+- For server actions, implement a custom rate limiting solution using Redis or similar technology
 
 ### 7. Session Management ⚠️
 
@@ -225,24 +114,8 @@ if (!canProceed) {
 
 **Solution:**
 - Set session timeouts in Supabase configuration
-- Implement re-authentication for sensitive operations:
-
-```typescript
-// For sensitive operations like changing password
-export async function requireReauthentication() {
-  const supabase = await createClient()
-  const { data: { session } } = await supabase.auth.getSession()
-  
-  // Check time since last authentication
-  const lastAuth = new Date(session?.created_at || 0)
-  const timeSinceAuth = Date.now() - lastAuth.getTime()
-  
-  if (timeSinceAuth > 30 * 60 * 1000) { // 30 minutes
-    // Redirect to reauthentication page
-    redirect('/auth/confirm-password')
-  }
-}
-```
+- Implement re-authentication for sensitive operations
+- Add functionality to require password confirmation for critical actions
 
 ## Implementation Priority
 
