@@ -24,8 +24,42 @@ The application has a basic authentication and route protection mechanism using 
 
 **Risk:** Various attacks including clickjacking, XSS, MIME-type sniffing, etc.
 
-**Solution:**
-- Add security headers in Next.js config:
+**Implementation Steps:**
+
+1. **Create or Update Next.js Config File** ✅
+   - Located existing `next.config.ts` file in the project root
+   - Verified it has the proper export structure
+
+2. **Define Basic Security Headers** ⚠️
+   - Define the initial set of non-CSP security headers:
+     - X-DNS-Prefetch-Control
+     - X-XSS-Protection
+     - X-Frame-Options
+     - X-Content-Type-Options
+     - Referrer-Policy
+   - Test that these headers are working correctly
+
+3. **Implement Content Security Policy (CSP)** ⚠️
+   - Add a basic CSP header with default directives
+   - Test your application to make sure it still functions properly
+   - Adjust CSP rules if you encounter any functionality issues
+
+4. **Add Headers Configuration to Next.js Config** ⚠️
+   - Implement the `headers()` function in Next.js config
+   - Configure it to apply security headers to all routes
+   - Make sure to exclude any paths that shouldn't have these headers
+
+5. **Test Security Headers Implementation** ⚠️
+   - Run your application locally
+   - Use browser developer tools to verify headers are being applied
+   - Consider using a security headers checking tool or service
+
+6. **Document the Implementation** ⚠️
+   - Update your security documentation to reflect the new headers
+   - Note any configuration decisions or trade-offs made
+   - Mark the task as completed in your WIP.md file
+
+**Example Implementation:**
 
 ```typescript
 // In next.config.ts
